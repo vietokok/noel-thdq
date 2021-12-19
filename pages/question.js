@@ -7,12 +7,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import dung from '../assets/dung.mp3';
 import sai from '../assets/sai.mp3';
 import { noelData } from '../constants/data';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 const colorButton = ['primary', 'secondary', 'success', 'warning'];
 const questionTag = ['A', 'B', 'C', 'D', 'E'];
@@ -23,6 +24,18 @@ function QuestionList() {
   const [qsIdx, setQsIdx] = useState(0);
   const saiRef = useRef(null);
   const dungRef = useRef(null);
+
+  const handleRouterChange = (key) => {
+    if (key === 'prev') {
+      router.push({
+        pathname: '/questionBefore',
+      });
+    } else {
+      router.push({
+        pathname: '/giangsinhamap',
+      });
+    }
+  };
 
   const handleQuestionChange = (key) => {
     if (key === 1) {
@@ -85,7 +98,11 @@ function QuestionList() {
     function myKeyDown(e) {
       if (e.key === 'ArrowLeft') {
         router.push({
-          pathname: '/',
+          pathname: '/questionBefore',
+        });
+      } else if (e.key === 'ArrowRight') {
+        router.push({
+          pathname: '/giangsinhamap',
         });
       }
     }
@@ -185,6 +202,9 @@ function QuestionList() {
 
             {matches ? (
               <Grid sx={{ marginTop: '1rem' }} container={true} justifyContent="flex-end">
+                <Box sx={{ opacity: '0' }}>
+                  <Link href="/giangsinhamap">Goto</Link>
+                </Box>
                 <Button
                   sx={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#DB2B39' }}
                   disabled={qsIdx === 0}
@@ -261,6 +281,26 @@ function QuestionList() {
           <audio ref={dungRef} src={dung} />
         </Box>
       </Container>
+      <Box
+        sx={{
+          display: 'flex',
+          position: 'fixed',
+          right: 20,
+          bottom: 20,
+        }}
+      >
+        <Button
+          onClick={() => handleRouterChange('prev')}
+          variant="contained"
+          color="secondary"
+          sx={{ marginRight: '0.5rem' }}
+        >
+          Trang trước
+        </Button>
+        <Button onClick={() => handleRouterChange('next')} variant="contained" color="secondary">
+          Trang tiếp
+        </Button>
+      </Box>
     </Box>
   );
 }

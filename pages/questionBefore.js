@@ -2,7 +2,6 @@ import { Box, Button, Container, Typography, useMediaQuery } from '@mui/material
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import noelMp from '../assets/noelMp.mp3';
 
 export default function Home() {
   const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
@@ -10,16 +9,29 @@ export default function Home() {
 
   const handleRouterChange = (key) => {
     if (key === 'prev') {
-    } else {
       router.push({
         pathname: '/newyear',
       });
+    } else {
+      router.push({
+        pathname: '/question',
+      });
     }
+  };
+
+  const handleStartClick = () => {
+    router.push({
+      pathname: '/question',
+    });
   };
 
   useEffect(() => {
     function myKeyDown(e) {
       if (e.key === 'ArrowRight') {
+        router.push({
+          pathname: '/question',
+        });
+      } else if (e.key === 'ArrowLeft') {
         router.push({
           pathname: '/newyear',
         });
@@ -66,8 +78,8 @@ export default function Home() {
                 color: '#fff',
               }}
             >
-              <Typography sx={{ fontWeight: 'bold', fontSize: '4.1rem' }}>
-                LIÊN ĐỘI TIỂU HỌC DƯƠNG QUANG
+              <Typography sx={{ fontWeight: 'bold' }} variant="h1">
+                CÂU HỎI GIAO LƯU
               </Typography>
             </Box>
           ) : (
@@ -79,36 +91,31 @@ export default function Home() {
                 color: '#fff',
               }}
             >
-              <Typography
-                sx={{ fontWeight: 'bold', fontSize: '1.25rem', background: '#eee', color: '#111' }}
-              >
-                LIÊN ĐỘI TIỂU HỌC DƯƠNG QUANG
+              <Typography sx={{ fontWeight: 'bold' }} variant="h4">
+                CÂU HỎI GIAO LƯU
               </Typography>
             </Box>
           )}
         </Box>
       </Container>
-
-      {matches && (
-        <Box
-          sx={{
-            position: 'absolute',
-            left: '50%',
-            transform: 'translate(-50%, 0)',
-            bottom: 20,
-            fontSize: '1rem',
-            textTransform: 'none',
-          }}
-        >
-          <audio controls>
-            <source src={noelMp} type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </audio>
-        </Box>
-      )}
       <Box sx={{ opacity: '0' }}>
-        <Link href="/newyear">Goto</Link>
+        <Link href="/question">Goto</Link>
       </Box>
+      <Button
+        onClick={handleStartClick}
+        sx={{
+          position: 'absolute',
+          left: '50%',
+          transform: 'translate(-50%, 0)',
+          bottom: matches ? 20 : 80,
+          fontSize: matches ? '1.5rem' : '1rem',
+          textTransform: 'none',
+        }}
+        variant="contained"
+        color="success"
+      >
+        Bắt đầu
+      </Button>
       <Box
         sx={{
           display: 'flex',
@@ -117,7 +124,12 @@ export default function Home() {
           bottom: 20,
         }}
       >
-        <Button disabled variant="contained" color="secondary" sx={{ marginRight: '0.5rem' }}>
+        <Button
+          onClick={() => handleRouterChange('prev')}
+          variant="contained"
+          color="secondary"
+          sx={{ marginRight: '0.5rem' }}
+        >
           Trang trước
         </Button>
         <Button onClick={() => handleRouterChange('next')} variant="contained" color="secondary">
