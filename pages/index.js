@@ -3,8 +3,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import noelMp from '../assets/noelMp.mp3';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function Home() {
+  const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
+  console.log(matches);
   const router = useRouter();
 
   const handleStartClick = () => {
@@ -57,31 +60,46 @@ export default function Home() {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              marginTop: '9rem',
+              marginTop: '8rem',
               color: '#fff',
             }}
           >
-            <Typography sx={{ fontWeight: 'bold' }} variant="h2">
-              LIÊN ĐỘI TIỂU HỌC DƯƠNG QUANG
-            </Typography>
+            {matches ? (
+              <Typography sx={{ fontWeight: 'bold' }} variant="h2">
+                LIÊN ĐỘI TIỂU HỌC DƯƠNG QUANG
+              </Typography>
+            ) : (
+              <Typography
+                sx={{
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  fontSize: '1.75rem',
+                  background: '#005A36',
+                }}
+              >
+                LIÊN ĐỘI TIỂU HỌC DƯƠNG QUANG
+              </Typography>
+            )}
           </Box>
         </Box>
       </Container>
 
-      <Box
-        sx={{
-          position: 'absolute',
-          right: 20,
-          bottom: 20,
-          fontSize: '1rem',
-          textTransform: 'none',
-        }}
-      >
-        <audio controls>
-          <source src={noelMp} type="audio/mpeg" />
-          Your browser does not support the audio element.
-        </audio>
-      </Box>
+      {matches && (
+        <Box
+          sx={{
+            position: 'absolute',
+            right: 20,
+            bottom: 20,
+            fontSize: '1rem',
+            textTransform: 'none',
+          }}
+        >
+          <audio controls>
+            <source src={noelMp} type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+        </Box>
+      )}
       <Box sx={{ opacity: '0' }}>
         <Link href="/question">Goto</Link>
       </Box>

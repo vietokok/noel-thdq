@@ -12,11 +12,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import dung from '../assets/dung.mp3';
 import sai from '../assets/sai.mp3';
 import { noelData } from '../constants/data';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const colorButton = ['primary', 'secondary', 'success', 'warning'];
 const questionTag = ['A', 'B', 'C', 'D', 'E'];
 
 function QuestionList() {
+  const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
   const router = useRouter();
   const [qsIdx, setQsIdx] = useState(0);
   const saiRef = useRef(null);
@@ -122,56 +124,108 @@ function QuestionList() {
           <Box sx={{ marginTop: '2rem' }}>
             {noelData.map((qs, index) => (
               <Box key={index} sx={{ display: index === qsIdx ? 'block' : 'none' }}>
-                <Typography
-                  color="#DB2B39"
-                  sx={{
-                    fontSize: '2.8rem',
-                    marginBottom: '2.5rem',
-                    fontWeight: 'bold',
-                  }}
-                >{`Câu ${index + 1}: ${qs.question}`}</Typography>
+                {matches ? (
+                  <Typography
+                    color="#DB2B39"
+                    sx={{
+                      fontSize: '2.8rem',
+                      marginBottom: '2.5rem',
+                      fontWeight: 'bold',
+                    }}
+                  >{`Câu ${index + 1}: ${qs.question}`}</Typography>
+                ) : (
+                  <Typography
+                    color="#DB2B39"
+                    sx={{
+                      fontSize: '1.25rem',
+                      marginBottom: '1rem',
+                      fontWeight: 'bold',
+                    }}
+                  >{`Câu ${index + 1}: ${qs.question}`}</Typography>
+                )}
                 {qs.answer.map((ans, idx) => (
                   <Stack key={idx}>
-                    <Button
-                      onClick={() => handleAnswerClick(!!ans.correct)}
-                      sx={{
-                        justifyContent: 'start',
-                        marginBottom: '1.5rem',
-                        fontSize: '2.8rem',
-                        padding: '1rem 2rem',
-                        borderRadius: '2rem',
-                        textTransform: 'none',
-                        color: '#111',
-                        textAlign: 'left',
-                      }}
-                      color={colorButton[idx]}
-                      variant="outlined"
-                    >{`${questionTag[idx]}. ${ans.value}`}</Button>
+                    {matches ? (
+                      <Button
+                        onClick={() => handleAnswerClick(!!ans.correct)}
+                        sx={{
+                          justifyContent: 'start',
+                          marginBottom: '1.5rem',
+                          fontSize: '2.8rem',
+                          padding: '1rem 2rem',
+                          borderRadius: '2rem',
+                          textTransform: 'none',
+                          color: '#111',
+                          textAlign: 'left',
+                        }}
+                        color={colorButton[idx]}
+                        variant="outlined"
+                      >{`${questionTag[idx]}. ${ans.value}`}</Button>
+                    ) : (
+                      <Button
+                        onClick={() => handleAnswerClick(!!ans.correct)}
+                        sx={{
+                          justifyContent: 'start',
+                          marginBottom: '1.5rem',
+                          fontSize: '1.25rem',
+                          padding: '0.5rem 1rem',
+                          borderRadius: '2rem',
+                          textTransform: 'none',
+                          color: '#111',
+                          textAlign: 'left',
+                        }}
+                        color={colorButton[idx]}
+                        variant="outlined"
+                      >{`${questionTag[idx]}. ${ans.value}`}</Button>
+                    )}
                   </Stack>
                 ))}
               </Box>
             ))}
 
-            <Grid sx={{ marginTop: '1rem' }} container={true} justifyContent="flex-end">
-              <Button
-                sx={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#DB2B39' }}
-                disabled={qsIdx === 0}
-                onClick={() => handleQuestionChange(0)}
-                size="large"
-                startIcon={<KeyboardArrowLeftOutlinedIcon />}
-              >
-                Câu trước
-              </Button>
-              <Button
-                sx={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#DB2B39' }}
-                disabled={qsIdx >= noelData.length - 1}
-                onClick={() => handleQuestionChange(1)}
-                size="large"
-                endIcon={<ChevronRightOutlinedIcon />}
-              >
-                Câu tiếp theo
-              </Button>
-            </Grid>
+            {matches ? (
+              <Grid sx={{ marginTop: '1rem' }} container={true} justifyContent="flex-end">
+                <Button
+                  sx={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#DB2B39' }}
+                  disabled={qsIdx === 0}
+                  onClick={() => handleQuestionChange(0)}
+                  size="large"
+                  startIcon={<KeyboardArrowLeftOutlinedIcon />}
+                >
+                  Câu trước
+                </Button>
+                <Button
+                  sx={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#DB2B39' }}
+                  disabled={qsIdx >= noelData.length - 1}
+                  onClick={() => handleQuestionChange(1)}
+                  size="large"
+                  endIcon={<ChevronRightOutlinedIcon />}
+                >
+                  Câu tiếp theo
+                </Button>
+              </Grid>
+            ) : (
+              <Grid sx={{ marginTop: '1rem' }} container={true} justifyContent="center">
+                <Button
+                  sx={{ fontSize: '1rem', fontWeight: 'bold', color: '#DB2B39' }}
+                  disabled={qsIdx === 0}
+                  onClick={() => handleQuestionChange(0)}
+                  size="large"
+                  startIcon={<KeyboardArrowLeftOutlinedIcon />}
+                >
+                  Câu trước
+                </Button>
+                <Button
+                  sx={{ fontSize: '1rem', fontWeight: 'bold', color: '#DB2B39' }}
+                  disabled={qsIdx >= noelData.length - 1}
+                  onClick={() => handleQuestionChange(1)}
+                  size="large"
+                  endIcon={<ChevronRightOutlinedIcon />}
+                >
+                  Câu tiếp theo
+                </Button>
+              </Grid>
+            )}
 
             <Dialog open={open.open} onClose={handleClose}>
               <DialogContent>
