@@ -80,13 +80,19 @@ function QuestionList() {
   };
 
   useEffect(() => {
-    document.addEventListener('keydown', function (e) {
+    function myKeyDown(e) {
       if (e.key === 'ArrowLeft') {
         router.push({
           pathname: '/',
         });
       }
-    });
+    }
+
+    document.addEventListener('keydown', myKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', myKeyDown);
+    };
   }, [router]);
 
   return (

@@ -14,13 +14,18 @@ export default function Home() {
   };
 
   useEffect(() => {
-    document.addEventListener('keydown', function (e) {
+    function myKeyDown(e) {
       if (e.key === 'ArrowRight') {
         router.push({
           pathname: '/question',
         });
       }
-    });
+    }
+    document.addEventListener('keydown', myKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', myKeyDown);
+    };
   }, [router]);
 
   return (
