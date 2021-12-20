@@ -8,9 +8,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import dung from '../assets/dung.mp3';
 import sai from '../assets/sai.mp3';
 import { noelData } from '../constants/data';
@@ -18,24 +16,11 @@ import { noelData } from '../constants/data';
 const colorButton = ['primary', 'secondary', 'success', 'warning'];
 const questionTag = ['A', 'B', 'C', 'D', 'E'];
 
-function QuestionList() {
+export function QuestionList() {
   const matches = useMediaQuery((theme) => theme.breakpoints.up('sm'));
-  const router = useRouter();
   const [qsIdx, setQsIdx] = useState(0);
   const saiRef = useRef(null);
   const dungRef = useRef(null);
-
-  const handleRouterChange = (key) => {
-    if (key === 'prev') {
-      router.push({
-        pathname: '/questionBefore',
-      });
-    } else {
-      router.push({
-        pathname: '/giangsinhamap',
-      });
-    }
-  };
 
   const handleQuestionChange = (key) => {
     if (key === 1) {
@@ -94,42 +79,8 @@ function QuestionList() {
     saiRef.current.play();
   };
 
-  useEffect(() => {
-    function myKeyDown(e) {
-      if (e.key === 'ArrowLeft') {
-        router.push({
-          pathname: '/questionBefore',
-        });
-      } else if (e.key === 'ArrowRight') {
-        router.push({
-          pathname: '/giangsinhamap',
-        });
-      }
-    }
-
-    document.addEventListener('keydown', myKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', myKeyDown);
-    };
-  }, [router]);
-
   return (
-    <Box sx={{ position: 'relative', minWidth: '100vw', minHeight: '100vh' }}>
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: `url('/c.jpg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          zIndex: -1,
-          filter: 'blur(0px)',
-        }}
-      ></Box>
+    <Box>
       <Container>
         <Box
           sx={{
@@ -202,9 +153,6 @@ function QuestionList() {
 
             {matches ? (
               <Grid sx={{ marginTop: '1rem' }} container={true} justifyContent="flex-end">
-                <Box sx={{ opacity: '0' }}>
-                  <Link href="/giangsinhamap">Goto</Link>
-                </Box>
                 <Button
                   sx={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#DB2B39' }}
                   disabled={qsIdx === 0}
@@ -281,28 +229,6 @@ function QuestionList() {
           <audio ref={dungRef} src={dung} />
         </Box>
       </Container>
-      <Box
-        sx={{
-          display: 'flex',
-          position: 'fixed',
-          right: 20,
-          bottom: 20,
-        }}
-      >
-        <Button
-          onClick={() => handleRouterChange('prev')}
-          variant="contained"
-          color="secondary"
-          sx={{ marginRight: '0.5rem' }}
-        >
-          Trang trước
-        </Button>
-        <Button onClick={() => handleRouterChange('next')} variant="contained" color="secondary">
-          Trang tiếp
-        </Button>
-      </Box>
     </Box>
   );
 }
-
-export default QuestionList;
