@@ -12,6 +12,7 @@ import {
   QuestionBefore,
   QuestionList,
 } from '../components/index';
+import Head from 'next/head';
 
 export default function HomeIndex() {
   const [screen, setScreen] = useState(0);
@@ -50,6 +51,9 @@ export default function HomeIndex() {
 
   return (
     <Box sx={{ position: 'relative', minWidth: '100vw', minHeight: '100vh' }}>
+      <Head>
+        <title>Tiểu học Dương Quang</title>
+      </Head>
       <Box
         sx={{
           position: 'absolute',
